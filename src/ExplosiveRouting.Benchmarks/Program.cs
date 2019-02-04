@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+using System;
 
 namespace ExplosiveRouting.Benchmarks
 {
@@ -6,7 +8,7 @@ namespace ExplosiveRouting.Benchmarks
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var summary = BenchmarkRunner.Run<ParserBenchmark>();
         }
     }
 }

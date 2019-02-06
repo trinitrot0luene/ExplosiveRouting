@@ -6,7 +6,7 @@ using System.Linq;
 namespace ExplosiveRouting.Tests.Parser
 {
     [TestFixture]
-    public class ExtractTokensrTests
+    public class Input
     {
         private IParser _parser;
 
@@ -19,24 +19,6 @@ namespace ExplosiveRouting.Tests.Parser
                 options.WhitespaceChars = new[] { ' ' };
                 options.EscapeChars = new[] { '\\' };
             });
-        }
-
-        [Test]
-        public void FactoryMethod()
-        {
-            Assert.Throws<ArgumentException>(() => ParserFactory.CreateParser(options =>
-            {
-                options.GroupingChars = null;
-                options.WhitespaceChars = null;
-                options.EscapeChars = null;
-            }));
-
-            Assert.NotNull(ParserFactory.CreateParser(options =>
-            {
-                options.GroupingChars = new[] { '\"', '\'' };
-                options.WhitespaceChars = new[] { ' ' };
-                options.EscapeChars = new[] { '\\' };
-            }));
         }
 
         [TestCase("")]
@@ -131,6 +113,12 @@ namespace ExplosiveRouting.Tests.Parser
             Assert.AreEqual(parsedValues[1], "\"ipsum");
             Assert.AreEqual(parsedValues[2], "\"dolor");
             Assert.AreEqual(parsedValues[3], "sit");
+        }
+
+        [TestCase("lorem ipsum\\")]
+        public void ParseException(string input)
+        {
+            Assert.Throws<ParsingException>(() => _parser.ExtractTokens(input).ToArray());
         }
     }
 }

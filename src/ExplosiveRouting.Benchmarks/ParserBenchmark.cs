@@ -6,15 +6,18 @@ using System.Text;
 
 namespace ExplosiveRouting.Benchmarks
 {
-    [ClrJob(baseline: true), CoreJob]
+    [CoreJob]
     public class ParserBenchmark
     {
         private IParser Parser { get; set; }
+
+        private ITokenizer Tokenizer { get; set; }
 
         [GlobalSetup]
         public void Setup()
         {
             Parser = ParserFactory.CreateParser(options => { });
+            Tokenizer = new Tokenizer(new ParserOptions());
         }
 
         [Params("", "a", "a b c", "lorem", "lorem ipsum dolor", "\"lorem ipsum\" dolor sit", 
@@ -22,6 +25,9 @@ namespace ExplosiveRouting.Benchmarks
         public string Input;
 
         [Benchmark]
-        public void Tokenize() => Parser.Tokenize(Input);
+        public void ExtractTokens() => Parser.ExtractTokens(Input);
+
+        [Benchmark]
+        public void Tokenize() => Tokenizer.Map(Input);
     }
 }

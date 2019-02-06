@@ -5,6 +5,6 @@ namespace ExplosiveRouting.Parser
 {
     public interface IParser
     {
-        string[] Tokenize(string input);
+        string[] ExtractTokens(string input);
     }
 }

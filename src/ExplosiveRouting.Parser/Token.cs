@@ -3,7 +3,7 @@
 namespace ExplosiveRouting.Parser
 {
     [Flags]
-    internal enum Token
+    public enum Token
     {
         None = 0,
 

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("ExplosiveRouting.Benchmarks")]
 
 namespace ExplosiveRouting.Parser
 {
@@ -8,25 +11,27 @@ namespace ExplosiveRouting.Parser
     {
         private IParserOptions Options { get; }
 
-        internal Parser(IParserOptions options)
+        private ITokenizer Tokenizer { get; }
+
+        internal Parser(IParserOptions options, ITokenizer tokenizer)
         {
             Options = options;
+            Tokenizer = tokenizer;
         }
 
-        public string[] Tokenize(string input)
+        public string[] ExtractTokens(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return new string[0];
 
             var source = input.AsMemory();
 
-            return ExtractTokens(source).ToArray();
+            return YieldTokens(source).ToArray();
         }
 
-        private IEnumerable<string> ExtractTokens(ReadOnlyMemory<char> source)
+        private IEnumerable<string> YieldTokens(ReadOnlyMemory<char> source)
         {
-            var map = TokenizeString(source.Span);
-
+            var map = Tokenizer.Map(source.Span);
             var flags = Token.None;
             var sPos = 0;
             for (int i = 0; i < source.Length; i++)
@@ -81,31 +86,8 @@ namespace ExplosiveRouting.Parser
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ResetFlags(ref Token source, Token flags)
             => source &= ~(flags);
-
-        private Token[] TokenizeString(ReadOnlySpan<char> source)
-        {
-            var map = (Token[]) Array.CreateInstance(typeof(Token), source.Length);
-            for (int i = 0; i < source.Length; i++)
-                map[i] = GetToken(source[i]);
-
-            return map;
-        }
-
-        private Token GetToken(char sourceChar)
-        {
-            switch (sourceChar)
-            {
-                case char c when Array.BinarySearch<char>(Options.WhitespaceChars, c) >= 0:
-                    return Token.Whitespace;
-                case char c when Array.BinarySearch<char>(Options.GroupingChars, c) >= 0:
-                    return Token.Grouping;
-                case char c when Array.BinarySearch<char>(Options.EscapeChars, c) >= 0:
-                    return Token.Escape;
-                default:
-                    return Token.Text;
-            }
-        }
     }
 }

@@ -5,7 +5,7 @@ using System;
 namespace ExplosiveRouting.Tests.Parser
 {
     [TestFixture]
-    public class TokenizerTests
+    public class ExtractTokensrTests
     {
         private IParser _parser;
 
@@ -21,7 +21,7 @@ namespace ExplosiveRouting.Tests.Parser
         }
 
         [Test]
-        public void TestParserCreation()
+        public void FactoryMethod()
         {
             Assert.Throws<ArgumentException>(() => ParserFactory.CreateParser(options =>
             {
@@ -41,7 +41,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("")]
         public void EmptyString(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 0);
         }
@@ -49,7 +49,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("a")]
         public void SingleCharacter(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 1);
             Assert.AreEqual(parsedValues[0], "a");
@@ -58,7 +58,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("a b c")]
         public void MultiCharacter(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 3);
             Assert.AreEqual(parsedValues[0], "a");
@@ -69,7 +69,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("lorem")]
         public void SingleWord(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 1);
             Assert.AreEqual(parsedValues[0], "lorem");
@@ -78,7 +78,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("lorem ipsum dolor")]
         public void MultiWord(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 3);
             Assert.AreEqual(parsedValues[0], "lorem");
@@ -89,7 +89,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("lorem     ipsum   dolor  ")]
         public void MultiWordSpaced(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 3);
             Assert.AreEqual(parsedValues[0], "lorem");
@@ -100,7 +100,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase(@"""lorem ipsum"" dolor sit")]
         public void MultiWordGrouped(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 3);
             Assert.AreEqual(parsedValues[0], "lorem ipsum");
@@ -111,7 +111,7 @@ namespace ExplosiveRouting.Tests.Parser
         [TestCase("lorem \"ipsum dolor\" \"sit\" amet")]
         public void MultiWordTwoGroupSingleWordInGroup(string input)
         {
-            var parsedValues = _parser.Tokenize(input);
+            var parsedValues = _parser.ExtractTokens(input);
 
             Assert.AreEqual(parsedValues.Length, 4);
             Assert.AreEqual(parsedValues[0], "lorem");
@@ -124,7 +124,7 @@ namespace ExplosiveRouting.Tests.Parser
         * [TestCase("lorem \\\"ipsum \\\"dolor sit")]
         * public void EscapedCharacters(string input)
         * {
-        *     var parsedValues = _parser.Tokenize(input);
+        *     var parsedValues = _parser.ExtractTokens(input);
         * 
         *     Assert.AreEqual(parsedValues.Length, 4);
         *     Assert.AreEqual(parsedValues[0], "lorem");

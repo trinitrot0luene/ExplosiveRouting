@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ExplosiveRouting.Benchmarks
 {
-    [CoreJob]
+    [CoreJob, MemoryDiagnoser]
     public class ParserBenchmark
     {
         private IParser Parser { get; set; }
@@ -28,6 +28,6 @@ namespace ExplosiveRouting.Benchmarks
         public void ExtractTokens() => Parser.ExtractTokens(Input);
 
         [Benchmark]
-        public void Tokenize() => Tokenizer.Map(Input);
+        public void Tokenize() => Tokenizer.YieldElements(Input.AsMemory());
     }
 }

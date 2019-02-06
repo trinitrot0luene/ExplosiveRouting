@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 namespace ExplosiveRouting.Parser
 {
+    /// <summary>
+    /// Extracts tokens from a string.
+    /// </summary>
     public interface IParser
     {
-        string[] ExtractTokens(string input);
+        IEnumerable<string> ExtractTokens(string input);
     }
 }

@@ -2,6 +2,7 @@
 using ExplosiveRouting.Parser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ExplosiveRouting.Benchmarks
@@ -16,7 +17,7 @@ namespace ExplosiveRouting.Benchmarks
         [GlobalSetup]
         public void Setup()
         {
-            Parser = ParserFactory.CreateParser(options => { });
+            Parser = ParserFactory.Create(options => { });
             Tokenizer = new Tokenizer(new ParserOptions());
         }
 
@@ -25,9 +26,6 @@ namespace ExplosiveRouting.Benchmarks
         public string Input;
 
         [Benchmark]
-        public void ExtractTokens() => Parser.ExtractTokens(Input);
-
-        [Benchmark]
-        public void Tokenize() => Tokenizer.YieldElements(Input.AsMemory());
+        public void ExtractTokens() => Parser.ExtractTokens(Input).ToList();
     }
 }

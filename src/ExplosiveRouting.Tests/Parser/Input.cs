@@ -13,7 +13,7 @@ namespace ExplosiveRouting.Tests.Parser
         [SetUp]
         public void SetUp()
         {
-            _parser = ParserFactory.CreateParser(options =>
+            _parser = ParserFactory.Create(options =>
             {
                 options.GroupingChars = new[] { '\"' };
                 options.WhitespaceChars = new[] { ' ' };

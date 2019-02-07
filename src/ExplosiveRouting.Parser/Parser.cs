@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 [assembly: InternalsVisibleTo("ExplosiveRouting.Benchmarks")]
+[assembly: InternalsVisibleTo("ExplosiveRouting.Tests")]
 
 namespace ExplosiveRouting.Parser
 {
+    /// <summary>
+    /// Extracts tokens from an input string.
+    /// </summary>
     public sealed class Parser : IParser
     {
         private IParserOptions Options { get; }

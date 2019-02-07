@@ -10,14 +10,25 @@ namespace ExplosiveRouting.Tests.Parser
         [Test]
         public void FactoryMethod()
         {
-            Assert.Throws<ArgumentException>(() => ParserFactory.CreateParser(options =>
+            Assert.Throws<ArgumentException>(() => ParserFactory.Create(options =>
             {
                 options.GroupingChars = null;
                 options.WhitespaceChars = null;
                 options.EscapeChars = null;
             }));
 
-            Assert.NotNull(ParserFactory.CreateParser(options =>
+            Assert.NotNull(ParserFactory.Create(options =>
+            {
+                options.GroupingChars = new[] { '\"', '\'' };
+                options.WhitespaceChars = new[] { ' ' };
+                options.EscapeChars = new[] { '\\' };
+            }));
+        }
+
+        [Test]
+        public void FactoryConfig()
+        {
+            Assert.DoesNotThrow(() => ParserFactory.Configure(options =>
             {
                 options.GroupingChars = new[] { '\"', '\'' };
                 options.WhitespaceChars = new[] { ' ' };

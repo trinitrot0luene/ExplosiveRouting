@@ -7,7 +7,7 @@ namespace ExplosiveRouting.Parser
     /// <summary>
     /// Represents a slice of a token to be extracted from the source string.
     /// </summary>
-    public readonly struct TokenElement
+    internal readonly struct TokenElement
     {
         /// <summary>
         /// Gets the index from where to start extracting the token.

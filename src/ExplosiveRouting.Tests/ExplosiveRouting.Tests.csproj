@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ExplosiveRouting.Parser\ExplosiveRouting.Parser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>

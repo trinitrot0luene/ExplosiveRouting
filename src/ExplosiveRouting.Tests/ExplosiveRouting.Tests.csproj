@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExplosiveRouting.Middleware\ExplosiveRouting.Middleware.csproj" />
     <ProjectReference Include="..\ExplosiveRouting.Parser\ExplosiveRouting.Parser.csproj" />
+    <ProjectReference Include="..\ExplosiveRouting.Shared\ExplosiveRouting.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

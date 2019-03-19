@@ -7,10 +7,13 @@ namespace ExplosiveRouting.Shared
     /// </summary>
     public sealed class ErrorResult : IFailureResult
     {
+        /// <summary>
+        /// Gets the error message of the result.
+        /// </summary>
         public string Message { get; }
 
         /// <summary>
-        /// The <see cref="Exception"/> which caused the operation to be aborted.
+        /// Gets the <see cref="Exception"/> which caused the operation to be aborted.
         /// </summary>
         public Exception Exception { get; }
 

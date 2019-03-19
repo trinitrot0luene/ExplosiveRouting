@@ -26,5 +26,10 @@ namespace ExplosiveRouting.Shared
             Message = message;
             Results = results;
         }
+
+        public AggregateResult(IReadOnlyCollection<IResult> results)
+        {
+            Results = results;
+        }
     }
 }

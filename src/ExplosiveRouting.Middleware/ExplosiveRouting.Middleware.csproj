@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExplosiveRouting.Shared\ExplosiveRouting.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace ExplosiveRouting.Shared
+﻿namespace ExplosiveRouting.Core
 {
     /// <summary>
     /// A generic <see cref="ISuccessResult"/> to signal that an operation was carried out successfully.

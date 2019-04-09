@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExplosiveRouting.Core;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,11 +14,11 @@ namespace ExplosiveRouting.Parser
     /// </summary>
     public sealed class Parser : IParser
     {
-        private IParserOptions Options { get; }
+        public IParserOptions Options { get; }
 
-        private ITokenizer Tokenizer { get; }
+        private ITokenizer<TokenElement> Tokenizer { get; }
 
-        internal Parser(IParserOptions options, ITokenizer tokenizer)
+        internal Parser(IParserOptions options, ITokenizer<TokenElement> tokenizer)
         {
             Options = options;
             Tokenizer = tokenizer;

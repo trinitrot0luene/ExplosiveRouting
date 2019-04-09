@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExplosiveRouting.Shared.Middleware
+namespace ExplosiveRouting.Core.Middleware
 {
     /// <summary>
     /// Configuration options for <see cref="IAsyncMiddleware"/> and <see cref="IMiddleware"/>.

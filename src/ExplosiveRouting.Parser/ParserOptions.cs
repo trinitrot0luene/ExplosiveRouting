@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExplosiveRouting.Core;
+using System;
 
 namespace ExplosiveRouting.Parser
 {

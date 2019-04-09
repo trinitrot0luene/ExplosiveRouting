@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExplosiveRouting.Shared
+namespace ExplosiveRouting.Core
 {
     /// <summary>
     /// A generic <see cref="IFailureResult"/> returned when there was an error preventing an operation from completing.

@@ -1,4 +1,5 @@
-﻿using ExplosiveRouting.Parser;
+﻿using ExplosiveRouting.Core;
+using ExplosiveRouting.Parser;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ExplosiveRouting.Tests.Parser
         [SetUp]
         public void SetUp()
         {
-            _parser = ParserFactory.Create(options =>
+            _parser = new ParserFactory().Create(options =>
             {
                 options.GroupingChars = new[] { '\"' };
                 options.WhitespaceChars = new[] { ' ' };
@@ -116,7 +117,13 @@ namespace ExplosiveRouting.Tests.Parser
         }
 
         [TestCase("lorem ipsum\\")]
-        public void ParseException(string input)
+        public void ExceptionThrownForBadEscapes(string input)
+        {
+            Assert.Throws<ParsingException>(() => _parser.ExtractTokens(input).ToArray());
+        }
+
+        [TestCase("lorem \"ipsum dolor")]
+        public void ExceptionThrownForUnterminatedGroup(string input)
         {
             Assert.Throws<ParsingException>(() => _parser.ExtractTokens(input).ToArray());
         }

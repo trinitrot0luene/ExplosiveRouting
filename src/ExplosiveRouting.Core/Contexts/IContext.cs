@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExplosiveRouting.Shared
+namespace ExplosiveRouting.Core
 {
     public interface IContext
     {

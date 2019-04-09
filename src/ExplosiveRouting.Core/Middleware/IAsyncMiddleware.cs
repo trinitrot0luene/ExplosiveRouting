@@ -1,7 +1,6 @@
-﻿using ExplosiveRouting.Shared;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ExplosiveRouting.Shared.Middleware
+namespace ExplosiveRouting.Core.Middleware
 {
     /// <summary>
     /// A transient container returning results to the caller asynchronously.

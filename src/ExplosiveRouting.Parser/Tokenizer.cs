@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ExplosiveRouting.Core;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace ExplosiveRouting.Parser
 {
-    internal sealed class Tokenizer : ITokenizer
+    internal sealed class Tokenizer : ITokenizer<TokenElement>
     {
         private IParserOptions Options { get; set; }
 
@@ -53,8 +54,6 @@ namespace ExplosiveRouting.Parser
                         }
                         continue;
                     default:
-                        if (flags.HasFlag(TokenFlags.Grouped))
-                            continue;
                         if (flags.HasFlag(TokenFlags.Yielded))
                         {
                             start = pos;
@@ -68,6 +67,8 @@ namespace ExplosiveRouting.Parser
                             yield return new TokenElement(start, start == pos ? 1 : pos - start + 1);
                             yield break;
                         }
+                        if (flags.HasFlag(TokenFlags.Grouped))
+                            continue;
                         continue;
                 }
             }

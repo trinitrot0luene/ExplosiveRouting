@@ -1,6 +1,6 @@
-﻿using ExplosiveRouting.Shared;
+﻿using ExplosiveRouting.Core;
 
-namespace ExplosiveRouting.Shared.Middleware
+namespace ExplosiveRouting.Core.Middleware
 {
     /// <summary>
     /// A singleton container returning results to the caller.

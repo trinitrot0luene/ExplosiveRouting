@@ -8,7 +8,11 @@ namespace ExplosiveRouting.Benchmarks
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<ParserBenchmark>();
+            var parserSummary = BenchmarkRunner.Run<ParserBenchmark>();
+
+            Console.ReadKey(true);
+
+            var reflectionSummary = BenchmarkRunner.Run<ReflectionBenchmark>();
         }
     }
 }

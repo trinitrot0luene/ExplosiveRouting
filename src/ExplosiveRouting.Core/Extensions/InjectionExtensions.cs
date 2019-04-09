@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExplosiveRouting.Shared
+namespace ExplosiveRouting.Core
 {
     public static class InjectionExtensions
     {

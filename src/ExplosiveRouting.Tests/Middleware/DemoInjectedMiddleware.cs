@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ExplosiveRouting.Tests.Middleware
 {
-    public sealed class DemoInjectedMiddleware : IMiddleware
+    public sealed class DemoInjectedMiddleware<TContext> : IMiddleware<TContext>
     {
         private Random Random { get; set; }
 
@@ -15,7 +15,7 @@ namespace ExplosiveRouting.Tests.Middleware
             Random = random;
         }
 
-        public IResult Run(IContext context)
+        public IResult Run(TContext context)
         {
             if (Random != null)
                 return new OkResult();

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace ExplosiveRouting.Tests.Middleware
 {
-    public sealed class DemoMiddleware : IMiddleware
+    public sealed class DemoMiddleware<TContext> : IMiddleware<TContext>
     {
-        public IResult Run(IContext context)
+        public IResult Run(TContext context)
         {
             return new OkResult();
         }

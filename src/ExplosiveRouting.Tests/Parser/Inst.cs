@@ -11,11 +11,11 @@ namespace ExplosiveRouting.Tests.Parser
         [Test]
         public void CreateWithDefaultConfig()
         {
-            var router = new Core.Router(new RouterConfiguration()
+            var router = new Core.Router<object>(new RouterConfiguration()
             {
                 ParserFactory = new ParserFactory()
             });
-            Assert.IsInstanceOf<Core.Router>(router);
+            Assert.IsInstanceOf<Core.Router<object>>(router);
 
             Assert.NotNull(router.Parser);
             Assert.NotNull(router.ParserOptions);
@@ -24,12 +24,12 @@ namespace ExplosiveRouting.Tests.Parser
         [Test]
         public void CreateBadly()
         {
-            Assert.Throws<NullReferenceException>(() => new Core.Router(new RouterConfiguration()
+            Assert.Throws<NullReferenceException>(() => new Core.Router<object>(new RouterConfiguration()
             {
                 ParserFactory = null
             }));
 
-            Assert.Throws<ArgumentException>(() => new Core.Router(new RouterConfiguration()
+            Assert.Throws<ArgumentException>(() => new Core.Router<object>(new RouterConfiguration()
             {
                 ParserFactory = new ParserFactory()
             }, options => options.EscapeChars = null));

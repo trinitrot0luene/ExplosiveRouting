@@ -11,13 +11,28 @@ namespace ExplosiveRouting.Tests.Parser
         [Test]
         public void CreateWithDefaultConfig()
         {
-            Assert.IsInstanceOf<Core.Router>(new Core.Router(new ParserFactory().Create));
+            var router = new Core.Router(new RouterConfiguration()
+            {
+                ParserFactory = new ParserFactory()
+            });
+            Assert.IsInstanceOf<Core.Router>(router);
+
+            Assert.NotNull(router.Parser);
+            Assert.NotNull(router.ParserOptions);
         }
 
         [Test]
         public void CreateBadly()
         {
-            Assert.Throws<ArgumentException>(() => new Core.Router(() => default(IParser)));
+            Assert.Throws<NullReferenceException>(() => new Core.Router(new RouterConfiguration()
+            {
+                ParserFactory = null
+            }));
+
+            Assert.Throws<ArgumentException>(() => new Core.Router(new RouterConfiguration()
+            {
+                ParserFactory = new ParserFactory()
+            }, options => options.EscapeChars = null));
         }
     }
 }

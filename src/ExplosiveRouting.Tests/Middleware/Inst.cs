@@ -10,6 +10,7 @@ namespace ExplosiveRouting.Tests.Middleware
     [TestFixture]
     public class Inst
     {
+        /*
         static IContext Context = new DemoContext();
 
         [Test]
@@ -62,5 +63,6 @@ namespace ExplosiveRouting.Tests.Middleware
             Assert.IsNotNull(MiddlewareFactory.Configure(options => {
             }));
         }
+        */
     }
 }

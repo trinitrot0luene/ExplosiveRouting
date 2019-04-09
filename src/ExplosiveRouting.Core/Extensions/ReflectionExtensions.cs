@@ -27,6 +27,7 @@ namespace ExplosiveRouting.Core.Extensions
 
             return typeArray;
         }
+
         public static Func<TTarget, object, object> CreateGenericInvoker<TTarget, TParam, TReturn>(this MethodInfo methodInfo)
             where TTarget : class
         {

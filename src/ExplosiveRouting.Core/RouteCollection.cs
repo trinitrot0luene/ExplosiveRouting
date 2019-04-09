@@ -9,7 +9,7 @@ namespace ExplosiveRouting.Core
     /// Contains a collection of <see cref="Route"/>s
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
-    public abstract class RouteCollection<TContext> where TContext : IContext
+    public abstract class RouteCollection<TContext>
     {
         public virtual Task OnExecuteAsync() => Task.CompletedTask;
 

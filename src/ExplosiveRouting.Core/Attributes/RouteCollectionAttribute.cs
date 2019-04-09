@@ -3,11 +3,11 @@
 namespace ExplosiveRouting.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public sealed class RoutePrefixesAttribute : Attribute
+    public sealed class RouteCollectionAttribute : Attribute
     {
         public string[] Prefixes { get; }
 
-        public RoutePrefixesAttribute(params string[] prefixes)
+        public RouteCollectionAttribute(params string[] prefixes)
         {
             Prefixes = prefixes;
         }

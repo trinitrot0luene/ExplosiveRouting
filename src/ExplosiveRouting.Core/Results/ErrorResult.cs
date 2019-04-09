@@ -19,6 +19,10 @@ namespace ExplosiveRouting.Core
 
         public ErrorResult(string message = null, Exception error = null)
         {
+            this.IsSuccess = false;
+
+            this.Message = message;
+            this.Exception = error;
         }
     }
 }

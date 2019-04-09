@@ -5,8 +5,8 @@ namespace ExplosiveRouting.Core.Middleware
     /// <summary>
     /// A singleton container returning results to the caller.
     /// </summary>
-    public interface IMiddleware
+    public interface IMiddleware<TContext>
     {
-        IResult Run(IContext context);
+        IResult Run(TContext context);
     }
 }

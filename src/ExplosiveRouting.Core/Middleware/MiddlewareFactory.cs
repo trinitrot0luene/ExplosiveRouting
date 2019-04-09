@@ -8,6 +8,7 @@ namespace ExplosiveRouting.Core.Middleware
 {
     public static class MiddlewareFactory
     {
+        /*
         private static IMiddlewareOptions Options { get; set; }
 
         private static SemaphoreSlim OptionsSynchronizer = new SemaphoreSlim(1, 1);
@@ -80,5 +81,6 @@ namespace ExplosiveRouting.Core.Middleware
             }
             return type.CreateInstanceOf<IAsyncMiddleware>(options.ServiceProvider);
         }
+        */
     }
 }

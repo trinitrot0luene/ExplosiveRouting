@@ -8,6 +8,9 @@ namespace ExplosiveRouting.Core
     {
         public static T CreateInstanceOf<T>(this Type type, IServiceProvider services)
         {
+            if (services == null)
+                return (T)Activator.CreateInstance(type);
+
             var ctors = type.GetConstructors()
                 .OrderByDescending(t => t.GetParameters().Length).ToArray();
 

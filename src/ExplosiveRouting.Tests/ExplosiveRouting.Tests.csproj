@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExplosiveRouting.Parser\ExplosiveRouting.Parser.csproj" />
-    <ProjectReference Include="..\ExplosiveRouting.Shared\ExplosiveRouting.Shared.csproj" />
+    <ProjectReference Include="..\ExplosiveRouting.Core\ExplosiveRouting.Core.csproj" />
   </ItemGroup>
 
 </Project>

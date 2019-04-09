@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExplosiveRouting.Shared
+namespace ExplosiveRouting.Core
 {
     /// <summary>
     /// A result returned when there was an error preventing an operation from completing.

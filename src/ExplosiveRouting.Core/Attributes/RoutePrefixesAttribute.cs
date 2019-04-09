@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExplosiveRouting.Shared.Attributes
+namespace ExplosiveRouting.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class RoutePrefixesAttribute : Attribute

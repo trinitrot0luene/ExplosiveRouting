@@ -1,56 +1,26 @@
 ﻿using System;
-using System.Threading;
+using ExplosiveRouting.Core;
 
 namespace ExplosiveRouting.Parser
 {
     /// <summary>
-    /// Factory for <see cref="IParser"/>.
+    /// A default implementation of <see cref="IParserFactory"/> using ExplosiveRouting's <see cref="ITokenizer{TElement}"/> implementation.
     /// </summary>
-    public static class ParserFactory
+    public sealed class ParserFactory : IParserFactory
     {
-        /// <summary>
-        /// Default options to use when creating new parsers.
-        /// </summary>
-        private static IParserOptions Options { get; set; }
-
-        /// <summary>
-        /// Synchronises access to <see cref="Options"/>.
-        /// </summary>
-        private static SemaphoreSlim OptionsSynchronizer = new SemaphoreSlim(1, 1);
-
-        /// <summary>
-        /// Creates a new instance of <see cref="IParser"/>.
-        /// </summary>
-        /// <param name="configureOptions">Method to configure the parsing options.</param>
-        /// <returns></returns>
-        public static IParser Create(Action<IParserOptions> configureOptions)
+        public IParser Create()
         {
             var options = new ParserOptions();
-            configureOptions(options);
             options.Validate();
-
-            var tokenizer = new Tokenizer(options);
-
-            return new Parser(options, tokenizer);
+            return new Parser(options, new Tokenizer(options));
         }
 
-        public static IParserOptions Configure(Action<IParserOptions> configureOptions)
+        public IParser Create(Action<IParserOptions> configureOptions)
         {
             var options = new ParserOptions();
             configureOptions(options);
             options.Validate();
-
-            OptionsSynchronizer.Wait();
-            
-            try
-            {
-                Options = options;
-                return Options;
-            }
-            finally
-            {
-                OptionsSynchronizer.Release();
-            }
+            return new Parser(options, new Tokenizer(options));
         }
     }
 }

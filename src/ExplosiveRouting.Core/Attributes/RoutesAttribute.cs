@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExplosiveRouting.Shared.Attributes
+namespace ExplosiveRouting.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class RoutesAttribute : Attribute

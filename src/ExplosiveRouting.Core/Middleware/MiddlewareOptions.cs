@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExplosiveRouting.Shared.Middleware
+namespace ExplosiveRouting.Core.Middleware
 {
     public sealed class MiddlewareOptions : IMiddlewareOptions
     {

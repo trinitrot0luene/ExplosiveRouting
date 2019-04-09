@@ -1,5 +1,5 @@
-﻿using ExplosiveRouting.Middleware;
-using ExplosiveRouting.Shared;
+﻿using ExplosiveRouting.Core.Middleware;
+using ExplosiveRouting.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;

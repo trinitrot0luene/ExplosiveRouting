@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using ExplosiveRouting.Shared;
+using ExplosiveRouting.Core;
 
-namespace ExplosiveRouting.Shared.Middleware
+namespace ExplosiveRouting.Core.Middleware
 {
     public static class MiddlewareFactory
     {

@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using ExplosiveRouting.Core;
 using ExplosiveRouting.Parser;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace ExplosiveRouting.Benchmarks
     {
         private IParser Parser { get; set; }
 
-        private ITokenizer Tokenizer { get; set; }
+        private ITokenizer<TokenElement> Tokenizer { get; set; }
 
         [GlobalSetup]
         public void Setup()
         {
-            Parser = ParserFactory.Create(options => { });
+            Parser = new ParserFactory().Create(options => { });
             Tokenizer = new Tokenizer(new ParserOptions());
         }
 

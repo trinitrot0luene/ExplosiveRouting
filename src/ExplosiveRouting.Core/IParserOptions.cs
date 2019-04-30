@@ -1,4 +1,4 @@
-﻿namespace ExplosiveRouting.Core
+﻿namespace ExplosiveRouting
 {
     /// <summary>
     /// Configuration options for an <see cref="IParser"/>.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExplosiveRouting.Core
+namespace ExplosiveRouting
 {
     /// <summary>
     /// Extracts token elements from a source string.

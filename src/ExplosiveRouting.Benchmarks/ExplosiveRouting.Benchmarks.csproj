@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExplosiveRouting.Core\ExplosiveRouting.Core.csproj" />
-    <ProjectReference Include="..\ExplosiveRouting.Parser\ExplosiveRouting.Parser.csproj" />
+    <ProjectReference Include="..\ExplosiveRouting.Core\ExplosiveRouting.csproj" />
   </ItemGroup>
 
 </Project>

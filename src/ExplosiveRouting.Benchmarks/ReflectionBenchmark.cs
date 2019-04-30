@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using ExplosiveRouting.Core.Extensions;
+using ExplosiveRouting.Extensions;
 
 namespace ExplosiveRouting.Benchmarks
 {
@@ -14,14 +14,14 @@ namespace ExplosiveRouting.Benchmarks
 
         private MethodInfo _demoMethod14;
 
-        private Func<A, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object> _invoker;
+        private Func<object, object[], object> _invoker;
 
         [GlobalSetup]
         public void Setup()
         {
             _a = new A();
             _demoMethod14 = typeof(A).GetMethod("Demo14");
-            _invoker = _demoMethod14.CreateGenericInvoker<A, object, object, object, object, object, object, object, object, object, object, object, object, object, object, int>();
+            _invoker = _demoMethod14.CreateCompiledInvocationDelegate();
         }
 
         private class A
@@ -32,7 +32,7 @@ namespace ExplosiveRouting.Benchmarks
         [Benchmark]
         public void FastGenerics()
         {
-            int ret = (int)_invoker(_a, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
+            int ret = (int)_invoker(_a, new object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 });
         }
 
         [Benchmark]

@@ -1,3 +1,3 @@
 # ExplosiveRouting
 
-A versatile routing library for use in a wide variety of applications.
+A .NET library for routing input to method calls.

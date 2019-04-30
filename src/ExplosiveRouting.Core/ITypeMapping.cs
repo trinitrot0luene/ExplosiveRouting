@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExplosiveRouting.Discovery
+namespace ExplosiveRouting
 {
     public interface ITypeMapping<TType, TContext>
     {

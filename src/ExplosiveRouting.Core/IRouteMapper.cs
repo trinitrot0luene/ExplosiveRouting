@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ExplosiveRouting.Discovery;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace ExplosiveRouting.Discovery
+namespace ExplosiveRouting
 {
     public interface IRouteMapper<TContext>
     {

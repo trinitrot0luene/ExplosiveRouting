@@ -1,4 +1,5 @@
 ﻿using ExplosiveRouting.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,12 +13,15 @@ namespace ExplosiveRouting.Discovery
     {
         private readonly ConcurrentDictionary<Type, Func<object, object[], object>> _mappings;
 
+        private readonly ConcurrentDictionary<Type, Type> _mappingTypes;
+
         public TypeMapper()
         {
             _mappings = new ConcurrentDictionary<Type, Func<object, object[], object>>();
+            _mappingTypes = new ConcurrentDictionary<Type, Type>();
         }
 
-        public void AddMapping(Assembly assembly)
+        public void AddMapping(Assembly assembly, IServiceCollection services)
         {
             var exportedTypes = assembly.GetExportedTypes();
             for (int i = 0; i < exportedTypes.Length; i++)
@@ -28,11 +32,11 @@ namespace ExplosiveRouting.Discovery
 
                 if (ifaceImpl == null) continue;
 
-                RegisterMap(ifaceImpl, exportedTypes[i]);
+                RegisterMap(ifaceImpl, exportedTypes[i], services);
             }
         }
 
-        public void AddMapping(Type mapperType)
+        public void AddMapping(Type mapperType, IServiceCollection services)
         {
             var ifaceImpl = mapperType
                 .GetInterfaces()
@@ -41,10 +45,10 @@ namespace ExplosiveRouting.Discovery
             if (ifaceImpl == null)
                 throw new ArgumentException("Your mapper must implement the ITypeMapping interface.");
 
-            RegisterMap(ifaceImpl, mapperType);
+            RegisterMap(ifaceImpl, mapperType, services);
         }
 
-        private void RegisterMap(Type ifaceImpl, Type mapperType)
+        private void RegisterMap(Type ifaceImpl, Type mapperType, IServiceCollection services)
         {
             var callback = mapperType
                 .GetMethod("MapAsync")
@@ -52,12 +56,20 @@ namespace ExplosiveRouting.Discovery
 
             var targetType = ifaceImpl.GetGenericArguments()[0];
 
+            services.AddSingleton(mapperType);
+
+            _mappingTypes[targetType] = mapperType;
             _mappings[targetType] = callback;
         }
 
         public bool TryGetMapping(Type target, out Func<object, object[], object> mapping)
         {
             return _mappings.TryGetValue(target, out mapping);
+        }
+
+        public bool TryGetMappingType(Type target, out Type mappingtype)
+        {
+            return _mappingTypes.TryGetValue(target, out mappingtype);
         }
     }
 }

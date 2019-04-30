@@ -1,8 +1,7 @@
 ﻿using ExplosiveRouting.Discovery;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ExplosiveRouting.Tests.Core
@@ -10,6 +9,8 @@ namespace ExplosiveRouting.Tests.Core
     [TestFixture]
     public class RouteMapperTests
     {
+        private readonly IServiceCollection _services = new ServiceCollection();
+
         [Test]
         public void RouteMapper_Create()
         {
@@ -22,7 +23,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             IRouteMapper<object> mapper = new RouteMapper<object>();
 
-            mapper.AddRoute(typeof(MockRoute));
+            mapper.AddRoute(typeof(MockRoute), _services);
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             IRouteMapper<object> mapper = new RouteMapper<object>();
 
-            Assert.Throws<ArgumentException>(() => mapper.AddRoute(typeof(object)));
+            Assert.Throws<ArgumentException>(() => mapper.AddRoute(typeof(object), _services));
         }
 
         [Test]
@@ -38,20 +39,20 @@ namespace ExplosiveRouting.Tests.Core
         {
             IRouteMapper<object> mapper = new RouteMapper<object>();
 
-            mapper.AddRoute(typeof(MockRoute));
-            mapper.AddRoute(typeof(MockRoute2));
+            mapper.AddRoute(typeof(MockRoute), _services);
+            mapper.AddRoute(typeof(MockRoute2), _services);
 
             Assert.True(mapper.TryGetRoute(new[] { "test" }, out var route));
-            Assert.NotNull(route);
+            Assert.NotNull(route.Item1);
 
             Assert.True(mapper.TryGetRoute(new[] { "test2" }, out var nestedRoute));
-            Assert.NotNull(nestedRoute);
+            Assert.NotNull(nestedRoute.Item1);
 
             Assert.True(mapper.TryGetRoute(new[] { "test3", "test4" }, out var nestedRoute2));
-            Assert.NotNull(nestedRoute2);
+            Assert.NotNull(nestedRoute2.Item1);
 
             Assert.True(mapper.TryGetRoute(new[] { "test5", "test6" }, out var route2));
-            Assert.NotNull(route2);
+            Assert.NotNull(route2.Item1);
         }
 
         [Test]
@@ -59,7 +60,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             IRouteMapper<object> mapper = new RouteMapper<object>();
 
-            Assert.Throws<ArgumentException>(() => mapper.AddRoute(typeof(MockRoute3)));
+            Assert.Throws<ArgumentException>(() => mapper.AddRoute(typeof(MockRoute3), _services));
         }
     }
 

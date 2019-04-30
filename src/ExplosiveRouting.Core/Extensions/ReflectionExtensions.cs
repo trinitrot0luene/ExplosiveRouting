@@ -71,7 +71,7 @@ namespace ExplosiveRouting.Extensions
 
         public static async Task<object> ConvertAsync(this Task task)
         {
-            await task;
+            await task.ConfigureAwait(false);
 
             var taskType = task.GetType();
 

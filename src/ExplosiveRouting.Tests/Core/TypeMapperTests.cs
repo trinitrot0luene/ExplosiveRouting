@@ -1,5 +1,6 @@
 ﻿using ExplosiveRouting.Discovery;
 using ExplosiveRouting.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace ExplosiveRouting.Tests.Core
     [TestFixture]
     public class TypeMapperTests
     {
+        private readonly IServiceCollection _services = new ServiceCollection();
+
         [Test]
         public void TypeMapper_Create()
         {
@@ -25,7 +28,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             var mapper = new TypeMapper();
 
-            mapper.AddMapping(typeof(MockConverter));
+            mapper.AddMapping(typeof(MockConverter), _services);
 
             Assert.True(mapper.TryGetMapping(typeof(int), out var mapping));
             Assert.NotNull(mapping);
@@ -42,7 +45,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             var mapper = new TypeMapper();
 
-            mapper.AddMapping(Assembly.GetAssembly(typeof(MockConverter)));
+            mapper.AddMapping(Assembly.GetAssembly(typeof(MockConverter)), _services);
 
             Assert.True(mapper.TryGetMapping(typeof(int), out var mapping));
             Assert.NotNull(mapping);
@@ -59,7 +62,7 @@ namespace ExplosiveRouting.Tests.Core
         {
             var mapper = new TypeMapper();
 
-            Assert.Throws<ArgumentException>(() => mapper.AddMapping(typeof(object)));
+            Assert.Throws<ArgumentException>(() => mapper.AddMapping(typeof(object), _services));
         }
     }
 

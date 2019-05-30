@@ -23,7 +23,7 @@ namespace ExplosiveRouting
             this._services = services;
         }
 
-        public async Task RouteAsync(TContext context, string input)
+        public async Task RouteAsync(TContext context, string input, bool throwOnAmbiguous = false, StringComparison comparisonStrategy = StringComparison.Ordinal)
         {
             var parser = _services.GetRequiredService<IParser>();
 
@@ -31,7 +31,7 @@ namespace ExplosiveRouting
 
             var mapper = _services.GetRequiredService<IRouteMapper<TContext>>();
             
-            if (!mapper.TryGetRoute(tokens, out (Route route, int pos) routeInfo))
+            if (!mapper.TryGetRoute(tokens, out (Route route, int pos) routeInfo, throwOnAmbiguous, comparisonStrategy))
             {
                 return;
             }
@@ -40,8 +40,8 @@ namespace ExplosiveRouting
 
             var inputs = await BuildInputsAsync(
                 context, 
-                routeInfo.route.MethodInfo, 
-                tokens.AsMemory().Slice(routeInfo.pos + 1), 
+                routeInfo.route, 
+                tokens.AsMemory().Slice(routeInfo.pos), 
                 typeMapper
                 ); // TODO: Add ParamArrayAttribute
 
@@ -49,32 +49,34 @@ namespace ExplosiveRouting
 
             var routeTask = (Task)routeInfo.route.Callback(moduleInst, inputs);
 
-            await routeTask.ConfigureAwait(false);
+            if (routeInfo.route.RunMode == RunMode.Sequential)
+                await routeTask.ConfigureAwait(false);
+            else
+                _ = Task.Run(() => routeTask).ConfigureAwait(false);
         }
 
-        private async Task<object[]> BuildInputsAsync(TContext context, MethodInfo info, ReadOnlyMemory<string> inputs, ITypeMapper mapper)
+        private async Task<object[]> BuildInputsAsync(TContext context, Route route, ReadOnlyMemory<string> inputs, ITypeMapper mapper)
         {
-            var parameters = info.GetParameters();
-            var inputBuffer = new object[parameters.Length];
+            var inputBuffer = new object[route.Parameters.Length];
 
-            for (int i = 0; i < parameters.Length; i++)
+            for (int i = 0; i < route.Parameters.Length; i++)
             {
-                if (i >= inputs.Length && !parameters[i].IsOptional)
+                if (i >= inputs.Length && !route.Parameters[i].IsOptional)
                     throw new ArgumentException("There were not enough tokens in the input string to parse required arguments from.");
 
-                if (mapper.TryGetMapping(parameters[i].ParameterType, out var map) 
-                    && mapper.TryGetMappingType(parameters[i].ParameterType, out var mappingType))
+                if (mapper.TryGetMapping(route.Parameters[i].ParameterType, out var map) 
+                    && mapper.TryGetMappingType(route.Parameters[i].ParameterType, out var mappingType))
                 {
                     var mappingInst = _services.GetRequiredService(mappingType);
 
-                    var mapTask = (Task)map(mappingInst, new object[] { context, inputs.Span[i] });
+                    var mapTask = (Task) map(mappingInst, new object[] { context, inputs.Span[i] });
 
                     var mappedType = await mapTask.ConvertAsync().ConfigureAwait(false);
                     inputBuffer[i] = mappedType;
                 }
                 else
                 {
-                    throw new ArgumentException($"There is no registered mapping from {inputs.Span[i]} to type {parameters[i].ParameterType}");
+                    throw new ArgumentException($"There is no registered mapping from {inputs.Span[i]} to type {route.Parameters[i].ParameterType}");
                 }
             }
 

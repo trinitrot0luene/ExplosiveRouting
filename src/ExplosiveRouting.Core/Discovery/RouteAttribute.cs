@@ -10,9 +10,18 @@ namespace ExplosiveRouting.Discovery
     {
         public string[] Routes { get; }
 
+        public RunMode RunMode { get; }
+
         public RouteAttribute(params string[] routes)
         {
-            Routes = routes;
+            Routes = routes.Length == 0 ? new[] { "" } : routes;
+            RunMode = RunMode.Sequential;
+        }
+
+        public RouteAttribute(RunMode runMode, params string[] routes)
+        {
+            Routes = routes.Length == 0 ? new[] { "" } : routes;
+            RunMode = runMode;
         }
     }
 }

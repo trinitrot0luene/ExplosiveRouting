@@ -48,11 +48,25 @@ namespace ExplosiveRouting.Tests.Core
             Assert.True(mapper.TryGetRoute(new[] { "test2" }, out var nestedRoute));
             Assert.NotNull(nestedRoute.Item1);
 
-            Assert.True(mapper.TryGetRoute(new[] { "test3", "test4" }, out var nestedRoute2));
+            Assert.True(mapper.TryGetRoute(new[] { "test3", "test4", "1" }, out var nestedRoute2));
             Assert.NotNull(nestedRoute2.Item1);
 
             Assert.True(mapper.TryGetRoute(new[] { "test5", "test6" }, out var route2));
             Assert.NotNull(route2.Item1);
+        }
+
+        [Test]
+        public void RouteMapper_SearchOptional()
+        {
+            IRouteMapper<object> mapper = new RouteMapper<object>();
+
+            mapper.AddRoute(typeof(MockRoute), _services);
+
+            Assert.True(mapper.TryGetRoute(new[] { "optional" }, out var optionalRoute));
+            Assert.NotNull(optionalRoute.Item1);
+
+            Assert.True(mapper.TryGetRoute(new[] { "optional", "1" }, out var optionalRoute2));
+            Assert.NotNull(optionalRoute.Item1);
         }
 
         [Test]
@@ -68,6 +82,12 @@ namespace ExplosiveRouting.Tests.Core
     {
         [Route("test")]
         public Task TestAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        [Route("optional")]
+        public Task TestOptional(int a = 10)
         {
             return Task.CompletedTask;
         }

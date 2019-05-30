@@ -14,7 +14,8 @@ namespace ExplosiveRouting.Discovery
 
         public bool TryGetRoute(string[] path, out (Route, int) value, bool throwOnAmbigious = false, StringComparison comparisonStrategy = StringComparison.Ordinal)
         {
-            value = FindRecurse(path, 0, throwOnAmbigious, comparisonStrategy);
+
+            value = FindRecurse();
 
             return value != (null, default);
         }
@@ -35,91 +36,68 @@ namespace ExplosiveRouting.Discovery
             }
         }
 
-        private (Route, int) FindRecurse(string[] path, int currPos, bool throwOnAmbigious = false, StringComparison comparisonStrategy = StringComparison.Ordinal, List<RouteNode> previousNodes = null)
+        private Route FindRecurse(ref int counter, string[] tokens, List<RouteNode> lastNodes = null)
         {
-            var nodes = Match(previousNodes, path[currPos], comparisonStrategy);
-
-            if (currPos > path.Length)
-                return (null, default);
-
-            if (nodes.Count == 0)
+            if (tokens.Length - counter < 1)
             {
-                return (null, default);
+                throw new NotImplementedException("Handle this.");
             }
-            else if (nodes.Count == 1)
-            {
-                if (nodes[0] is Route route)
-                {
-                    var isPossible = RouteIsPossible(path.Length - currPos, route);
 
-                    return isPossible ? (route, currPos) : (null, default);
+            var currentString = tokens[counter++];
+
+            var currentNodes = (lastNodes ?? Root.Nodes).FindAll(n => MatchRoute(n, currentString));
+
+            for (int i = 0; i < currentNodes.Count; i++)
+            {
+                if (currentNodes[i] is Route route)
+                {
+                    if (ValidateRoute(tokens.AsSpan().Slice(counter), route))
+                        return route;
+                    else
+                        currentNodes.Remove(currentNodes[i]);
+                }
+            }
+
+            return FindRecurse(ref counter, tokens, currentNodes);
+        }
+
+        private bool ValidateRoute(Span<string> tokens, Route route)
+        {
+            var parameters = route.Parameters;
+            for (int i = 0; i < route.Parameters.Length; i++)
+            {
+                if (parameters[i].IsOptional)
+                {                                                                                     
                 }
                 else
                 {
-                    goto Next;
+                    if (tokens)
                 }
-            }
-
-            var routes = nodes.FindAll(n => n is Route r && RouteIsPossible(path.Length - currPos, r));
-
-            if (routes.Count > 1)
-            {
-                if (throwOnAmbigious)
-                    throw new Exception("Multiple routes matched this input.");
-                else
-                    return (null, default);
-            }
-
-        Next:
-
-            return FindRecurse(path, ++currPos, throwOnAmbigious, comparisonStrategy, nodes);
-        }
-
-        private List<RouteNode> Match(List<RouteNode> source, string path, StringComparison comparisonStrategy)
-        {
-            if (source == null)
-            {
-                return Root.Nodes.FindAll(n =>
-                {
-                    for (int i = 0; i < n.Routes.Length; i++)
-                    {
-                        if (string.Equals("", n.Routes[i]) || string.Equals(path, n.Routes[i], comparisonStrategy))
-                            return true;
-                    }
-
-                    return false;
-                });
-            }
-            else
-            {
-                var nodes = new List<RouteNode>();
-                for (int i = 0; i < source.Count; i++)
-                {
-                    if (source[i].Next != null)
-                    {
-                        nodes.AddRange(source[i].Next.FindAll(n =>
-                        {
-                            for (int j = 0; j < n.Routes.Length; i++)
-                            {
-                                if (string.Equals("", n.Routes[i]) || string.Equals(path, n.Routes[i], comparisonStrategy))
-                                    return true;
-                            }
-
-                            return false;
-                        }));
-                    }
-                }
-
-                return nodes;
             }
         }
 
-        private bool RouteIsPossible(int remainingItems, Route targetRoute)
+        private bool MatchRoute(RouteNode n, string currentString)
         {
-            if (targetRoute.RequiredParamCount <= remainingItems)
-                return true;
+            for (int i = 0; i < n.Routes.Length; i++)
+                if (string.Equals("", n.Routes[i]) || string.Equals(currentString, n.Routes[i]))
+                    return true;
 
             return false;
+        }
+
+        private bool RouteIsPossible(int tokensLeft, Route route)
+        {
+            for (int i = 0; i  < route.Parameters.Length; i++)
+            {
+                if (route.Parameters[i].IsOptional)
+                    return true;
+                else if (tokensLeft == 0)
+                    return false;
+
+                --tokensLeft;
+            }
+
+            return tokensLeft == 0;
         }
 
         private void AddNode(RouteNode parent, Type containingType, IServiceCollection services)
@@ -150,7 +128,7 @@ namespace ExplosiveRouting.Discovery
                 if (routeAttr == null) continue;
 
                 if (!typeof(Task).IsAssignableFrom(methods[i].ReturnType))
-                    throw new ArgumentException("A route must return type Task.");
+                    throw new ArgumentException("A route must have return type of Task.");
 
                 switch (controllerAttr.ServiceLifetime)
                 {
@@ -167,11 +145,12 @@ namespace ExplosiveRouting.Discovery
 
                 var route = new Route()
                 {
-                    Routes = routeAttr.Routes,
+                    Routes     = routeAttr.Routes,
+                    RunMode    = routeAttr.RunMode,
                     Parameters = methods[i].GetParameters(),
                     Attributes = methods[i].GetCustomAttributes().ToArray(),
                     MethodInfo = methods[i],
-                    Callback = methods[i].CreateCompiledInvocationDelegate(),
+                    Callback   = methods[i].CreateCompiledInvocationDelegate(),
                     Next = null
                 };
 
